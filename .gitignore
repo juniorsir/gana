@@ -1,7 +1,12 @@
+# Python build artifacts
 __pycache__/
 *.pyc
 build/
 dist/
 *.egg-info/
+
+# Local config
+.DS_Store
+
+# Temporary files from build scripts
 *.deb
-debian/usr/
