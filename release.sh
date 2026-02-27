@@ -5,27 +5,30 @@ set -e
 # CONFIG
 # =========================
 APP_NAME="gana"
-VERSION="1.0.7"  # Bumped version to fix broken install
+VERSION="1.0.9" # Bump version to clear cache issues
 KEY_ID="87256EF09168BFBB9787D47F0D5C7BC2E3F98249"
 BUILD_DIR="build_termux"
 REPO_DIR="docs"
-DEB_NAME="${APP_NAME}_${VERSION}_all.deb" # Changed to _all convention
-
-# HARDCODED TERMUX PATH (Crucial Fix)
+DEB_NAME="${APP_NAME}_${VERSION}_all.deb"
 TERMUX_PATH="/data/data/com.termux/files/usr"
 
 echo "🚧 Building $APP_NAME v$VERSION..."
 
 # =========================
-# CLEAN OLD BUILD
+# CLEAN LOCAL BUILD ARTIFACTS
 # =========================
 rm -rf "$BUILD_DIR"
 rm -f "$DEB_NAME"
 
 # =========================
+# CLEAN REPO (Crucial Fix)
+# =========================
+# Remove ALL old .deb files so apt doesn't get confused
+rm -f "$REPO_DIR/debs/"*.deb
+
+# =========================
 # CREATE TERMUX STRUCTURE
 # =========================
-# We create the full path inside the build directory
 mkdir -p "$BUILD_DIR$TERMUX_PATH/bin"
 mkdir -p "$BUILD_DIR$TERMUX_PATH/lib/python-gana"
 mkdir -p "$BUILD_DIR/DEBIAN"
@@ -56,8 +59,8 @@ EOF
 # =========================
 cat <<EOF > "$BUILD_DIR/DEBIAN/postinst"
 #!$TERMUX_PATH/bin/sh
-echo "Installing python dependencies..."
-pip install yt-dlp requests --upgrade
+echo "Installing dependencies..."
+pip install yt-dlp requests --upgrade --break-system-packages
 exit 0
 EOF
 chmod 755 "$BUILD_DIR/DEBIAN/postinst"
@@ -116,7 +119,7 @@ cd ..
 # GIT PUSH
 # =========================
 git add .
-git commit -m "Release $APP_NAME v$VERSION (Fix Paths)"
+git commit -m "Release $APP_NAME v$VERSION (Clean Build)"
 git push
 
 echo "✅ Release Complete!"

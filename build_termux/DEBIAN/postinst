@@ -1,4 +1,4 @@
 #!/data/data/com.termux/files/usr/bin/sh
-echo "Installing python dependencies..."
-pip install yt-dlp requests --upgrade
+echo "Installing dependencies..."
+pip install yt-dlp requests --upgrade --break-system-packages
 exit 0
