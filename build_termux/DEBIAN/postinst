@@ -1,0 +1,6 @@
+#!/data/data/com.termux/files/usr/bin/sh
+spin() { pid=$!; i=0; printf "\033[?25l"; while kill -0 \$pid 2>/dev/null; do i=\$(( (i+1) % 4 )); case \$i in 0) c="|";; 1) c="/";; 2) c="-";; 3) c="\\";; esac; printf "\r\033[38;5;51m[%s]\033[0m %s..." "\$c" "\$1"; sleep 0.1; done; wait \$pid; printf "\r\033[?25h\033[38;5;46m[✓]\033[0m %s... Done!       \n" "\$1"; };
+python -m pip install yt-dlp requests --upgrade --break-system-packages -q > /dev/null 2>&1 &
+spin "Initializing Audio Engine"
+printf "\n\033[38;5;46m[✓] GANA is installed!\033[0m Type 'gana' to start.\n"
+exit 0

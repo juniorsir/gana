@@ -1,0 +1,3 @@
+[console_scripts]
+gana = gana.cli:main
+gana-player = gana.cli:main
