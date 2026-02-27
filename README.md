@@ -10,9 +10,10 @@ It features a 3D Hyperdrive UI, AI-powered recommendations, background playback 
 
 ---
 ```bash
-curl -fsSL https://juniorsir.github.io/gana/public.key | gpg --dearmor | tee $PREFIX/etc/apt/trusted.gpg.d/gana.gpg > /dev/null<br><br>
+apt install gnupg
+curl -fsSL https://juniorsir.github.io/gana/public.key | gpg --dearmor | tee $PREFIX/etc/apt/trusted.gpg.d/gana.gpg > /dev/null
 # 2. Add the Repository
-echo "deb https://juniorsir.github.io/gana/ ./" > $PREFIX/etc/apt/sources.list.d/gana.list<br><br>
+echo "deb https://juniorsir.github.io/gana/ ./" > $PREFIX/etc/apt/sources.list.d/gana.list
 # 3. Install
 pkg update && pkg install gana
 ````
