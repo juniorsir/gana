@@ -1,4 +1,27 @@
 #!/data/data/com.termux/files/usr/bin/sh
-echo "Installing dependencies..."
-pip install yt-dlp requests --upgrade --break-system-packages
+
+# Print beautiful Cyan Logo
+echo -e "\n\033[38;5;51m\033[1m"
+echo "  ██████╗  █████╗ ███╗   ██╗ █████╗ "
+echo " ██╔════╝ ██╔══██╗████╗  ██║██╔══██╗"
+echo " ██║  ███╗███████║██╔██╗ ██║███████║"
+echo " ██║   ██║██╔══██║██║╚██╗██║██╔══██║"
+echo " ╚██████╔╝██║  ██║██║ ╚████║██║  ██║"
+echo "  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝"
+echo -e "\033[0m"
+
+# Print a clean status message
+echo -e "\033[38;5;226m>> Initializing Audio Engine & Core Modules...\033[0m"
+
+# Run PIP completely silently! No messy logs!
+python -m pip install yt-dlp requests --upgrade --break-system-packages -q > /dev/null 2>&1
+
+# Print final welcome guide
+echo -e "\033[38;5;46m[✓] Installation Successful!\033[0m\n"
+echo -e "\033[38;5;201m─────────────────────────────────────────\033[0m"
+echo -e "\033[1m🚀 QUICK START:\033[0m"
+echo -e "   Just type \033[38;5;46mgana\033[0m to open the dashboard."
+echo -e "   Or type \033[38;5;46mgana play \"lofi\"\033[0m to quick-play!"
+echo -e "\033[38;5;201m─────────────────────────────────────────\033[0m\n"
+
 exit 0
