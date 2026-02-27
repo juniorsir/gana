@@ -3,10 +3,10 @@ Version: 1.0.6
 Architecture: all
 Maintainer: JuniorSir
 Depends: python
-Filename: ./repo/debs/gana_1.0.6_termux.deb
-Size: 25032
-MD5sum: 6ff5e3bdf238161645913a1f8d845b4b
-SHA1: 20be00e52a38866bcbcb321dd5d183b13d54a898
-SHA256: 47418937db0af6f167b10cee492ceb3c996262be027c46a26592cbdf17df738e
+Filename: ./debs/gana_1.0.6_termux.deb
+Size: 24988
+MD5sum: a1a9aff9f4ca35e41528ac645c3b65c5
+SHA1: 44fa8b030b80f944644c5bef82ae6d79e004f4ab
+SHA256: edb83c0f9e6332700cc63d3a31db1b63261a6f0cf66756d2affc25357434570a
 Description: Gana CLI music player for Termux
 
