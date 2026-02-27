@@ -5,7 +5,7 @@ set -e
 # CONFIG
 # =========================
 APP_NAME="gana"
-VERSION="1.0.9" # Bump version to clear cache issues
+VERSION="1.0.10"  # <--- BUMPED VERSION
 KEY_ID="87256EF09168BFBB9787D47F0D5C7BC2E3F98249"
 BUILD_DIR="build_termux"
 REPO_DIR="docs"
@@ -15,34 +15,24 @@ TERMUX_PATH="/data/data/com.termux/files/usr"
 echo "🚧 Building $APP_NAME v$VERSION..."
 
 # =========================
-# CLEAN LOCAL BUILD ARTIFACTS
+# CLEANUP
 # =========================
 rm -rf "$BUILD_DIR"
-rm -f "$DEB_NAME"
-
-# =========================
-# CLEAN REPO (Crucial Fix)
-# =========================
-# Remove ALL old .deb files so apt doesn't get confused
+# Remove ALL old debs to prevent conflicts
 rm -f "$REPO_DIR/debs/"*.deb
 
 # =========================
-# CREATE TERMUX STRUCTURE
+# BUILD STRUCTURE
 # =========================
 mkdir -p "$BUILD_DIR$TERMUX_PATH/bin"
 mkdir -p "$BUILD_DIR$TERMUX_PATH/lib/python-gana"
 mkdir -p "$BUILD_DIR/DEBIAN"
-
 chmod 755 "$BUILD_DIR/DEBIAN"
 
-# =========================
-# COPY SOURCE CODE
-# =========================
+# Copy Code
 cp -r gana "$BUILD_DIR$TERMUX_PATH/lib/python-gana/"
 
-# =========================
-# CONTROL FILE
-# =========================
+# Control File
 cat <<EOF > "$BUILD_DIR/DEBIAN/control"
 Package: $APP_NAME
 Version: $VERSION
@@ -54,9 +44,7 @@ Maintainer: JuniorSir <juniorsir011@gmail.com>
 Description: Gana CLI music player for Termux
 EOF
 
-# =========================
-# POST INSTALL
-# =========================
+# Post-Install
 cat <<EOF > "$BUILD_DIR/DEBIAN/postinst"
 #!$TERMUX_PATH/bin/sh
 echo "Installing dependencies..."
@@ -65,9 +53,7 @@ exit 0
 EOF
 chmod 755 "$BUILD_DIR/DEBIAN/postinst"
 
-# =========================
-# WRAPPER BINARY
-# =========================
+# Binary Wrapper
 cat <<EOF > "$BUILD_DIR$TERMUX_PATH/bin/$APP_NAME"
 #!$TERMUX_PATH/bin/sh
 export PYTHONPATH="$TERMUX_PATH/lib/python-gana"
@@ -75,52 +61,38 @@ exec python -m gana.cli "\$@"
 EOF
 chmod 755 "$BUILD_DIR$TERMUX_PATH/bin/$APP_NAME"
 
-# =========================
-# BUILD DEB
-# =========================
+# Build Deb
 dpkg-deb --build "$BUILD_DIR" "$DEB_NAME"
 
-echo "📦 Deb built: $DEB_NAME"
-
-# =========================
-# MOVE TO REPO
-# =========================
+# Move to Docs
 mkdir -p "$REPO_DIR/debs"
 mv "$DEB_NAME" "$REPO_DIR/debs/"
 
+# =========================
+# REPO METADATA
+# =========================
 cd "$REPO_DIR"
-
-# =========================
-# REGENERATE METADATA
-# =========================
 rm -f Packages Packages.gz Release Release.gpg InRelease
 
-# Scan packages
+# Generate Index
 dpkg-scanpackages debs /dev/null > Packages
 gzip -k -f Packages
-
-# Release file
 apt-ftparchive release . > Release
 
-# =========================
-# SIGN REPO
-# =========================
+# Sign
 gpg --default-key "$KEY_ID" -abs -o Release.gpg Release
 gpg --default-key "$KEY_ID" --clearsign -o InRelease Release
-
-# =========================
-# EXPORT PUBLIC KEY
-# =========================
 gpg --export -a "$KEY_ID" > public.key
 
 cd ..
 
 # =========================
-# GIT PUSH
+# GIT DEPLOY
 # =========================
+# Force add the debs folder in case it was ignored
+git add -f "$REPO_DIR/debs/"
 git add .
-git commit -m "Release $APP_NAME v$VERSION (Clean Build)"
+git commit -m "Release $APP_NAME v$VERSION"
 git push
 
-echo "✅ Release Complete!"
-echo "🌍 Repo URL: https://juniorsir.github.io/gana/"
+echo "✅ Uploaded v$VERSION. Wait 2 minutes for GitHub Pages to deploy!"
