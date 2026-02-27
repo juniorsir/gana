@@ -1,8 +1,0 @@
-Package: gana
-Version: 1.1.18
-Section: utils
-Priority: optional
-Architecture: all
-Depends: python, mpv, ffmpeg
-Maintainer: JuniorSir <juniorsir011@gmail.com>
-Description: Gana CLI music player for Termux

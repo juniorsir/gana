@@ -1,7 +1,0 @@
-#!/data/data/com.termux/files/usr/bin/bash
-
-WHEEL="/data/data/com.termux/files/usr/share/gana/gana_player-1.0.6-py3-none-any.whl"
-
-pip install --upgrade --no-deps "$WHEEL"
-
-exit 0

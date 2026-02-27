@@ -1,6 +1,0 @@
-Package: gana
-Version: 1.0.6
-Architecture: all
-Maintainer: JuniorSir
-Depends: python
-Description: Gana CLI music player for Termux

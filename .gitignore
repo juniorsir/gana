@@ -10,3 +10,4 @@ dist/
 
 # Temporary files from build scripts
 *.deb
+release.sh
