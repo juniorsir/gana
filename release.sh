@@ -24,9 +24,9 @@ dpkg-deb --build debian
 mv debian.deb gana_${VERSION}_termux.deb
 
 echo "[6] Updating APT repo..."
-cp gana_${VERSION}_termux.deb repo/debs/
+cp gana_${VERSION}_termux.deb docs/debs/
 
-cd repo
+cd docs
 
 rm -f Packages Packages.gz Release Release.gpg InRelease
 
