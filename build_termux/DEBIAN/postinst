@@ -1,5 +1,5 @@
 #!/data/data/com.termux/files/usr/bin/sh
-
+clear
 # Print Logo
 printf "\n\033[38;5;51m\033[1m"
 printf "  ██████╗  █████╗ ███╗   ██╗ █████╗ \n"

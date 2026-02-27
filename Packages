@@ -1,13 +1,13 @@
 Package: gana
-Version: 1.1.17
+Version: 1.1.18
 Architecture: all
 Maintainer: JuniorSir <juniorsir011@gmail.com>
 Depends: python, mpv, ffmpeg
-Filename: debs/gana_1.1.17_all.deb
+Filename: debs/gana_1.1.18_all.deb
 Size: 18572
-MD5sum: d525d75583d977373b6d5eb5fa9ffa69
-SHA1: a361ba79a775157dd78cfa7c9eb05690d0a69a2f
-SHA256: e1554b480f8f630f6bcf8e1c2c968398af5d8319906a5226f8e82f209ec9c14a
+MD5sum: 42ec273f5a75b25a06e969db726f8a4d
+SHA1: 7f1054d6ff359e718c20b582218ad4df03213d64
+SHA256: b0c99fdc966f2c28cac2062e5a12caa7d5a06ba3c0cdd0946d578e47d0426c8b
 Section: utils
 Priority: optional
 Description: Gana CLI music player for Termux

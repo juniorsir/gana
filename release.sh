@@ -2,7 +2,7 @@
 set -e
 
 APP_NAME="gana"
-VERSION="1.1.17" # Bumped to fix Bad Substitution
+VERSION="1.1.18" # Bumped to fix Bad Substitution
 KEY_ID="87256EF09168BFBB9787D47F0D5C7BC2E3F98249"
 BUILD_DIR="build_termux"
 DEB_NAME="${APP_NAME}_${VERSION}_all.deb"
@@ -37,7 +37,7 @@ EOF
 # =========================
 cat <<'EOF' > "$BUILD_DIR/DEBIAN/postinst"
 #!/data/data/com.termux/files/usr/bin/sh
-
+clear
 # Print Logo
 printf "\n\033[38;5;51m\033[1m"
 printf "  ██████╗  █████╗ ███╗   ██╗ █████╗ \n"
