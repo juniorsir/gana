@@ -218,3 +218,4 @@ Built with love for hackers, developers, and terminal enthusiasts.
 
 MIT License © 2026
 
+# gana_source
