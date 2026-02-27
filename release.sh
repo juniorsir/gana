@@ -1,28 +1,24 @@
 #!/bin/bash
 set -e
 
-# =========================
-# CONFIG
-# =========================
 APP_NAME="gana"
-VERSION="1.0.11" # Bumped to 1.0.11
+VERSION="1.0.12" # Failsafe Bump
 KEY_ID="87256EF09168BFBB9787D47F0D5C7BC2E3F98249"
 BUILD_DIR="build_termux"
-REPO_DIR="."     # <--- FIXED: Now builds in the ROOT directory
 DEB_NAME="${APP_NAME}_${VERSION}_all.deb"
 TERMUX_PATH="/data/data/com.termux/files/usr"
 
 echo "🚧 Building $APP_NAME v$VERSION..."
 
 # =========================
-# CLEANUP
+# 1. AGGRESSIVE CLEANUP
 # =========================
 rm -rf "$BUILD_DIR"
-rm -f "$DEB_NAME"
-rm -f debs/*.deb
+rm -rf debs/      # Delete the problematic folder
+rm -f *.deb       # Delete any old debs in root
 
 # =========================
-# BUILD STRUCTURE
+# 2. BUILD STRUCTURE
 # =========================
 mkdir -p "$BUILD_DIR$TERMUX_PATH/bin"
 mkdir -p "$BUILD_DIR$TERMUX_PATH/lib/python-gana"
@@ -31,9 +27,6 @@ chmod 755 "$BUILD_DIR/DEBIAN"
 
 cp -r gana "$BUILD_DIR$TERMUX_PATH/lib/python-gana/"
 
-# =========================
-# CONTROL FILE
-# =========================
 cat <<EOF > "$BUILD_DIR/DEBIAN/control"
 Package: $APP_NAME
 Version: $VERSION
@@ -45,9 +38,6 @@ Maintainer: JuniorSir <juniorsir011@gmail.com>
 Description: Gana CLI music player for Termux
 EOF
 
-# =========================
-# POST INSTALL
-# =========================
 cat <<EOF > "$BUILD_DIR/DEBIAN/postinst"
 #!$TERMUX_PATH/bin/sh
 echo "Installing dependencies..."
@@ -56,9 +46,6 @@ exit 0
 EOF
 chmod 755 "$BUILD_DIR/DEBIAN/postinst"
 
-# =========================
-# WRAPPER BINARY
-# =========================
 cat <<EOF > "$BUILD_DIR$TERMUX_PATH/bin/$APP_NAME"
 #!$TERMUX_PATH/bin/sh
 export PYTHONPATH="$TERMUX_PATH/lib/python-gana"
@@ -67,18 +54,17 @@ EOF
 chmod 755 "$BUILD_DIR$TERMUX_PATH/bin/$APP_NAME"
 
 # =========================
-# BUILD DEB & MOVE
+# 3. BUILD DIRECTLY TO ROOT
 # =========================
 dpkg-deb --build "$BUILD_DIR" "$DEB_NAME"
-mkdir -p debs
-mv "$DEB_NAME" debs/
 
 # =========================
-# REGENERATE METADATA
+# 4. REGENERATE METADATA
 # =========================
 rm -f Packages Packages.gz Release Release.gpg InRelease
 
-dpkg-scanpackages debs /dev/null > Packages
+# Scan the current directory (.) instead of 'debs'
+dpkg-scanpackages . /dev/null > Packages
 gzip -k -f Packages
 apt-ftparchive release . > Release
 
@@ -87,10 +73,10 @@ gpg --default-key "$KEY_ID" -abs -o Release.gpg Release
 gpg --default-key "$KEY_ID" --clearsign -o InRelease Release
 
 # =========================
-# GIT DEPLOY
+# 5. GIT DEPLOY
 # =========================
 git add .
-git commit -m "Release $APP_NAME v$VERSION (Root Path Fix)"
+git commit -m "Release $APP_NAME v$VERSION (Root Hosted Fix)"
 git push
 
-echo "✅ Uploaded v$VERSION. Wait ~30 seconds for GitHub Pages to deploy!"
+echo "✅ Uploaded v$VERSION directly to root. Wait ~30 seconds."
