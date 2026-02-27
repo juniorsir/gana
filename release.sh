@@ -2,7 +2,7 @@
 set -e
 
 APP_NAME="gana"
-VERSION="1.0.12" # Failsafe Bump
+VERSION="1.0.13" # Bumped to clear cache
 KEY_ID="87256EF09168BFBB9787D47F0D5C7BC2E3F98249"
 BUILD_DIR="build_termux"
 DEB_NAME="${APP_NAME}_${VERSION}_all.deb"
@@ -11,11 +11,12 @@ TERMUX_PATH="/data/data/com.termux/files/usr"
 echo "🚧 Building $APP_NAME v$VERSION..."
 
 # =========================
-# 1. AGGRESSIVE CLEANUP
+# 1. CLEANUP
 # =========================
 rm -rf "$BUILD_DIR"
-rm -rf debs/      # Delete the problematic folder
-rm -f *.deb       # Delete any old debs in root
+# Delete old debs in the folder to save repo space
+rm -rf debs/
+mkdir -p debs/
 
 # =========================
 # 2. BUILD STRUCTURE
@@ -54,17 +55,17 @@ EOF
 chmod 755 "$BUILD_DIR$TERMUX_PATH/bin/$APP_NAME"
 
 # =========================
-# 3. BUILD DIRECTLY TO ROOT
+# 3. BUILD DIRECTLY INTO 'debs' FOLDER
 # =========================
-dpkg-deb --build "$BUILD_DIR" "$DEB_NAME"
+dpkg-deb --build "$BUILD_DIR" "debs/$DEB_NAME"
 
 # =========================
 # 4. REGENERATE METADATA
 # =========================
 rm -f Packages Packages.gz Release Release.gpg InRelease
 
-# Scan the current directory (.) instead of 'debs'
-dpkg-scanpackages . /dev/null > Packages
+# THIS IS THE MAGIC LINE: It scans the 'debs' folder and adds "debs/" to the Packages file paths.
+dpkg-scanpackages debs /dev/null > Packages
 gzip -k -f Packages
 apt-ftparchive release . > Release
 
@@ -75,8 +76,10 @@ gpg --default-key "$KEY_ID" --clearsign -o InRelease Release
 # =========================
 # 5. GIT DEPLOY
 # =========================
+# Force add the debs folder to bypass any .gitignore rules!
+git add -f debs/
 git add .
-git commit -m "Release $APP_NAME v$VERSION (Root Hosted Fix)"
+git commit -m "Release $APP_NAME v$VERSION (Moved to debs folder)"
 git push
 
-echo "✅ Uploaded v$VERSION directly to root. Wait ~30 seconds."
+echo "✅ Uploaded v$VERSION into the 'debs/' folder. Wait ~60 seconds."
