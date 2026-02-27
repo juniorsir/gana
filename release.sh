@@ -5,12 +5,14 @@ set -e
 # CONFIG
 # =========================
 APP_NAME="gana"
-VERSION="1.0.8"
+VERSION="1.0.7"  # Bumped version to fix broken install
 KEY_ID="87256EF09168BFBB9787D47F0D5C7BC2E3F98249"
 BUILD_DIR="build_termux"
 REPO_DIR="docs"
-DEB_NAME="${APP_NAME}_${VERSION}_termux.deb"
-PREFIX="$PREFIX"
+DEB_NAME="${APP_NAME}_${VERSION}_all.deb" # Changed to _all convention
+
+# HARDCODED TERMUX PATH (Crucial Fix)
+TERMUX_PATH="/data/data/com.termux/files/usr"
 
 echo "🚧 Building $APP_NAME v$VERSION..."
 
@@ -23,8 +25,9 @@ rm -f "$DEB_NAME"
 # =========================
 # CREATE TERMUX STRUCTURE
 # =========================
-mkdir -p "$BUILD_DIR/$PREFIX/bin"
-mkdir -p "$BUILD_DIR/$PREFIX/lib/python-gana"
+# We create the full path inside the build directory
+mkdir -p "$BUILD_DIR$TERMUX_PATH/bin"
+mkdir -p "$BUILD_DIR$TERMUX_PATH/lib/python-gana"
 mkdir -p "$BUILD_DIR/DEBIAN"
 
 chmod 755 "$BUILD_DIR/DEBIAN"
@@ -32,7 +35,7 @@ chmod 755 "$BUILD_DIR/DEBIAN"
 # =========================
 # COPY SOURCE CODE
 # =========================
-cp -r gana "$BUILD_DIR/$PREFIX/lib/python-gana/"
+cp -r gana "$BUILD_DIR$TERMUX_PATH/lib/python-gana/"
 
 # =========================
 # CONTROL FILE
@@ -52,8 +55,9 @@ EOF
 # POST INSTALL
 # =========================
 cat <<EOF > "$BUILD_DIR/DEBIAN/postinst"
-#!$PREFIX/bin/sh
-python -m pip install yt-dlp requests --upgrade
+#!$TERMUX_PATH/bin/sh
+echo "Installing python dependencies..."
+pip install yt-dlp requests --upgrade
 exit 0
 EOF
 chmod 755 "$BUILD_DIR/DEBIAN/postinst"
@@ -61,12 +65,12 @@ chmod 755 "$BUILD_DIR/DEBIAN/postinst"
 # =========================
 # WRAPPER BINARY
 # =========================
-cat <<EOF > "$BUILD_DIR/$PREFIX/bin/$APP_NAME"
-#!$PREFIX/bin/sh
-export PYTHONPATH="$PREFIX/lib/python-gana"
+cat <<EOF > "$BUILD_DIR$TERMUX_PATH/bin/$APP_NAME"
+#!$TERMUX_PATH/bin/sh
+export PYTHONPATH="$TERMUX_PATH/lib/python-gana"
 exec python -m gana.cli "\$@"
 EOF
-chmod 755 "$BUILD_DIR/$PREFIX/bin/$APP_NAME"
+chmod 755 "$BUILD_DIR$TERMUX_PATH/bin/$APP_NAME"
 
 # =========================
 # BUILD DEB
@@ -88,9 +92,11 @@ cd "$REPO_DIR"
 # =========================
 rm -f Packages Packages.gz Release Release.gpg InRelease
 
+# Scan packages
 dpkg-scanpackages debs /dev/null > Packages
 gzip -k -f Packages
 
+# Release file
 apt-ftparchive release . > Release
 
 # =========================
@@ -110,7 +116,7 @@ cd ..
 # GIT PUSH
 # =========================
 git add .
-git commit -m "Release $APP_NAME v$VERSION"
+git commit -m "Release $APP_NAME v$VERSION (Fix Paths)"
 git push
 
 echo "✅ Release Complete!"
