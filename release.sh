@@ -1,44 +1,117 @@
-#!/data/data/com.termux/files/usr/bin/bash
+#!/bin/bash
 set -e
 
+# =========================
+# CONFIG
+# =========================
+APP_NAME="gana"
 VERSION="1.0.6"
-KEY="87256EF09168BFBB9787D47F0D5C7BC2E3F98249"
+KEY_ID="87256EF09168BFBB9787D47F0D5C7BC2E3F98249"
+BUILD_DIR="build_termux"
+REPO_DIR="docs"
+DEB_NAME="${APP_NAME}_${VERSION}_termux.deb"
+PREFIX="$PREFIX"
 
-echo "[1] Cleaning..."
-rm -rf build dist debian/usr
-mkdir -p debian/usr/share/gana
+echo "🚧 Building $APP_NAME v$VERSION..."
 
-echo "[2] Building wheel..."
-python -m build
+# =========================
+# CLEAN OLD BUILD
+# =========================
+rm -rf "$BUILD_DIR"
+rm -f "$DEB_NAME"
 
-echo "[3] Copying wheel..."
-cp dist/gana_player-$VERSION-py3-none-any.whl debian/usr/share/gana/
+# =========================
+# CREATE TERMUX STRUCTURE
+# =========================
+mkdir -p "$BUILD_DIR/$PREFIX/bin"
+mkdir -p "$BUILD_DIR/$PREFIX/lib/python-gana"
+mkdir -p "$BUILD_DIR/DEBIAN"
 
-echo "[4] Fixing permissions..."
-chmod 755 debian
-chmod 755 debian/DEBIAN
-chmod 755 debian/DEBIAN/postinst
+chmod 755 "$BUILD_DIR/DEBIAN"
 
-echo "[5] Building .deb..."
-dpkg-deb --build debian
-mv debian.deb gana_${VERSION}_termux.deb
+# =========================
+# COPY SOURCE CODE
+# =========================
+cp -r gana "$BUILD_DIR/$PREFIX/lib/python-gana/"
 
-echo "[6] Updating APT repo..."
-cp gana_${VERSION}_termux.deb docs/debs/
+# =========================
+# CONTROL FILE
+# =========================
+cat <<EOF > "$BUILD_DIR/DEBIAN/control"
+Package: $APP_NAME
+Version: $VERSION
+Section: utils
+Priority: optional
+Architecture: all
+Depends: python, mpv, ffmpeg
+Maintainer: JuniorSir <juniorsir011@gmail.com>
+Description: Gana CLI music player for Termux
+EOF
 
-cd docs
+# =========================
+# POST INSTALL
+# =========================
+cat <<EOF > "$BUILD_DIR/DEBIAN/postinst"
+#!$PREFIX/bin/sh
+python -m pip install yt-dlp requests --upgrade
+exit 0
+EOF
+chmod 755 "$BUILD_DIR/DEBIAN/postinst"
 
+# =========================
+# WRAPPER BINARY
+# =========================
+cat <<EOF > "$BUILD_DIR/$PREFIX/bin/$APP_NAME"
+#!$PREFIX/bin/sh
+export PYTHONPATH="$PREFIX/lib/python-gana"
+exec python -m gana.cli "\$@"
+EOF
+chmod 755 "$BUILD_DIR/$PREFIX/bin/$APP_NAME"
+
+# =========================
+# BUILD DEB
+# =========================
+dpkg-deb --build "$BUILD_DIR" "$DEB_NAME"
+
+echo "📦 Deb built: $DEB_NAME"
+
+# =========================
+# MOVE TO REPO
+# =========================
+mkdir -p "$REPO_DIR/debs"
+mv "$DEB_NAME" "$REPO_DIR/debs/"
+
+cd "$REPO_DIR"
+
+# =========================
+# REGENERATE METADATA
+# =========================
 rm -f Packages Packages.gz Release Release.gpg InRelease
 
-dpkg-scanpackages . /dev/null > Packages
+dpkg-scanpackages debs /dev/null > Packages
 gzip -k -f Packages
+
 apt-ftparchive release . > Release
 
-gpg --default-key $KEY -abs -o Release.gpg Release
-gpg --default-key $KEY --clearsign -o InRelease Release
+# =========================
+# SIGN REPO
+# =========================
+gpg --default-key "$KEY_ID" -abs -o Release.gpg Release
+gpg --default-key "$KEY_ID" --clearsign -o InRelease Release
 
+# =========================
+# EXPORT PUBLIC KEY
+# =========================
+gpg --export -a "$KEY_ID" > public.key
+
+cd ..
+
+# =========================
+# GIT PUSH
+# =========================
 git add .
-git commit -m "Release gana $VERSION" || true
-git push --set-upstream origin main
+git commit -m "Release $APP_NAME v$VERSION"
+git push
 
-echo "✅ Release complete."
+echo "✅ Release Complete!"
+echo "🌍 Repo URL: https://juniorsir.github.io/gana/"
