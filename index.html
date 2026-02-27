@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>GANA Player APT Repository</title>
+    <style>
+        body { background: #0f0f0f; color: #00ffff; font-family: monospace; padding: 50px; }
+        a { color: #00ff00; }
+    </style>
+</head>
+<body>
+    <h1>🎧 GANA PLAYER REPOSITORY</h1>
+    <p>This is an APT repository for Termux. Do not browse here manually.</p>
+    <p>To install, run this in Termux:</p>
+    <pre>
+curl -fsSL https://juniorsir.github.io/gana/public.key | gpg --dearmor | tee $PREFIX/etc/apt/trusted.gpg.d/gana.gpg > /dev/null
+echo "deb https://juniorsir.github.io/gana/ ./" > $PREFIX/etc/apt/sources.list.d/gana.list
+pkg update
+pkg install gana
+    </pre>
+</body>
+</html>
