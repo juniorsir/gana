@@ -2,7 +2,7 @@
 set -e
 
 APP_NAME="gana"
-VERSION="1.0.16" # Bumped to add postinst animations
+VERSION="1.0.17" # Bumped to fix Bad Substitution
 KEY_ID="87256EF09168BFBB9787D47F0D5C7BC2E3F98249"
 BUILD_DIR="build_termux"
 DEB_NAME="${APP_NAME}_${VERSION}_all.deb"
@@ -10,16 +10,10 @@ TERMUX_PATH="/data/data/com.termux/files/usr"
 
 echo "🚧 Building $APP_NAME v$VERSION..."
 
-# =========================
-# 1. CLEANUP
-# =========================
 rm -rf "$BUILD_DIR"
 rm -rf debs/
 mkdir -p debs/
 
-# =========================
-# 2. BUILD STRUCTURE
-# =========================
 mkdir -p "$BUILD_DIR$TERMUX_PATH/bin"
 mkdir -p "$BUILD_DIR$TERMUX_PATH/lib/python-gana"
 mkdir -p "$BUILD_DIR/DEBIAN"
@@ -39,12 +33,12 @@ Description: Gana CLI music player for Termux
 EOF
 
 # =========================
-# 3. BEAUTIFUL ANIMATED POST INSTALL
+# 3. POSIX-SAFE ANIMATION
 # =========================
 cat <<'EOF' > "$BUILD_DIR/DEBIAN/postinst"
 #!/data/data/com.termux/files/usr/bin/sh
 
-# Print beautiful Cyan Logo
+# Print Logo
 printf "\n\033[38;5;51m\033[1m"
 printf "  ██████╗  █████╗ ███╗   ██╗ █████╗ \n"
 printf " ██╔════╝ ██╔══██╗████╗  ██║██╔══██╗\n"
@@ -54,30 +48,37 @@ printf " ╚██████╔╝██║  ██║██║ ╚███�
 printf "  ╚═════╝ ╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝\n"
 printf "\033[0m\n"
 
-# Spinner Function
+# POSIX-Safe Spinner Function
 spin() {
     pid=$!
-    spin='⣾⣽⣻⢿⡿⣟⣯⣷'
     i=0
     # Hide cursor
     printf "\033[?25l"
+    
     while kill -0 $pid 2>/dev/null; do
-        i=$(( (i+1) % 8 ))
-        printf "\r\033[38;5;51m[%c]\033[0m %s" "${spin:$i:1}" "$1"
+        i=$(( (i+1) % 4 ))
+        case $i in
+            0) char="|" ;;
+            1) char="/" ;;
+            2) char="-" ;;
+            3) char="\\" ;;
+        esac
+        
+        printf "\r\033[38;5;51m[%s]\033[0m %s..." "$char" "$1"
         sleep 0.1
     done
     wait $pid
+    
     # Show cursor, print success
-    printf "\033[?25h\r\033[38;5;46m[✓]\033[0m %s... Done!       \n" "$1"
+    printf "\r\033[?25h\033[38;5;46m[✓]\033[0m %s... Done!       \n" "$1"
 }
 
-# Run PIP completely silently in the background
+# Run PIP silently
 python -m pip install yt-dlp requests --upgrade --break-system-packages -q > /dev/null 2>&1 &
 
-# Call the spinner while the background task runs
-spin "Initializing Audio Engine & Core Modules"
+# Animate
+spin "Initializing Audio Engine"
 
-# Print final welcome guide
 printf "\n\033[38;5;201m─────────────────────────────────────────\033[0m\n"
 printf "\033[1m🚀 QUICK START:\033[0m\n"
 printf "   Just type \033[38;5;46mgana\033[0m to open the dashboard.\n"
@@ -99,15 +100,11 @@ EOF
 chmod 755 "$BUILD_DIR$TERMUX_PATH/bin/$APP_NAME"
 
 # =========================
-# 5. BUILD DEB
+# 5. BUILD & DEPLOY
 # =========================
 dpkg-deb --build "$BUILD_DIR" "debs/$DEB_NAME"
 
-# =========================
-# 6. REGENERATE METADATA
-# =========================
 rm -f Packages Packages.gz Release Release.gpg InRelease
-
 dpkg-scanpackages debs /dev/null > Packages
 gzip -k -f Packages
 apt-ftparchive release . > Release
@@ -115,12 +112,9 @@ apt-ftparchive release . > Release
 gpg --default-key "$KEY_ID" -abs -o Release.gpg Release
 gpg --default-key "$KEY_ID" --clearsign -o InRelease Release
 
-# =========================
-# 7. GIT DEPLOY
-# =========================
 git add -f debs/
 git add .
-git commit -m "Release $APP_NAME v$VERSION (Animated postinst)"
+git commit -m "Release $APP_NAME v$VERSION (Posix Fix)"
 git push
 
 echo "✅ Uploaded v$VERSION. Wait ~60 seconds."
