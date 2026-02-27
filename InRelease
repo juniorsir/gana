@@ -1,0 +1,49 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
+
+Date: Fri, 27 Feb 2026 14:54:30 +0000
+MD5Sum:
+ 13c4594ba2c7cca4e766a149d0df56e8              349 Packages
+ 6f23b9efedbdd6d80720e0170d6a4378              294 Packages.gz
+ c308e7a96c2e4bcb477265e82454d922               38 Release
+ 2d570e3283bfa827699727dec52b5211              344 repo/Packages
+ 0d208cd7446955acd2637e67786e1fa2              292 repo/Packages.gz
+ 3b2394fea703bb42da900e303246f8cc             1204 repo/Release
+SHA1:
+ 8bc4e79b1619c80f05b56079d4600066f612c3da              349 Packages
+ 18a75e92d42eadaa8f9527e9a664a76997999539              294 Packages.gz
+ 13c9353bf6ed7a1e60fc2e0eaf82cb1152cc7db9               38 Release
+ da69d173726ed712dca3c7d485d25f01ec68c858              344 repo/Packages
+ 9c6ead176af508f30258f76f34f755b9f1178800              292 repo/Packages.gz
+ 095015e12a8665ab080b4b9d831c846da12265d2             1204 repo/Release
+SHA256:
+ ac488fa2ba5602fb39e8d116140c806feb6ce7db3bd343f15a2a86f10f384465              349 Packages
+ bf6b0f1efcb6dd0186da9cafb0e969f3d373db8af41c452cf9993d5a7b108ff5              294 Packages.gz
+ 5d7320cd262b9b1a8472ab2e035cab5ae2937fb06a5da39507374bbecebf2c62               38 Release
+ 960fd06632ee67ad1946e605be4a32b35abf395ed61982ba76b80be38c6ec3d8              344 repo/Packages
+ fd6fa1f90b302888bd03a62d165ac7c1875e39d2dd0bd35222cec930f9fd7ec5              292 repo/Packages.gz
+ 9b217c9e72d48c8972c092818a4b9ab08599d867653337beea80347779fdeecb             1204 repo/Release
+SHA512:
+ 0b92bf417937845fbc8a734c3c149b6fee0bf1ad2a5a0148ca2f5f496373fdbb6b97c1584a1692ee4ebbc7962e58a4948eb4f6af0cd58605785fe859d8f67461              349 Packages
+ 8a7f50047f489f3ab9dd387440d7df5d2a1d4a16deeef9483f0d2e9e04acad266dec6059250b5a348ab13ed72caa7c020bb9c0671b761dc8dc990ae07a1a77e4              294 Packages.gz
+ 52bd06c57a9fae9ffecb6f0f6dc389fdc5800c50a5834005707dd8894cdeed291e06eaf1fbec8ed1601b2665c9e32128060180183fbfd3898431de4576234a77               38 Release
+ 56dbd4a0369837c098669ea96218d418aaed4adaf2a1397914469bdf66c80570df7b04280d69f303c6a8882647e40b00fd327164d7547a2842d42ddabf96b4fa              344 repo/Packages
+ ba55f8c10f80efd4feb8690f4284278b14e61ecfdca39d4b1973e151829fea90f9f7bc8e5c23b34593b30b62e70fff00a7767af1766ec4968cb55b564ea5ab83              292 repo/Packages.gz
+ b716cec202d075453164fa1a1f118d37f9449cc4c49d0ce3181c5229fa9cb729ff162feb0ec38c685c893618b4695f1bc532ed1729fe02670823df5bb14409be             1204 repo/Release
+-----BEGIN PGP SIGNATURE-----
+
+iQJPBAEBCAA5FiEEhyVu8JFov7uXh9R/DVx7wuP5gkkFAmmhsDYbFIAAAAAABAAO
+bWFudTIsMi41KzEuMTEsMywyAAoJEA1ce8Lj+YJJlSoQAIn+uKAXkvLh+1hEVe+8
+iDAIOYvAffneL3ywm7yEi1uMFlSaI8v1ipy19PjQSjYoF4TAsoFG8rU4lUplQU12
+HRFGx9+cq77eA22xpzLEOFYQy1Or2kBikc/4fayfahNuBmKp7PhChCmzZI751V87
++Kn1h/V3Ap/wLQldkt8I/Gg8LUwqlxTM8pWuCmZMQIoj67mn3ZmhSBljV/Pg25r2
+FT8frgudfdrsz+bugX4MqH1ZtRzjww4xS1WjR9FQuKtosBL2VqlLjv8syoXXpDf0
+L+XB3Ci94rl6DTIMTpVVeuUPujlGH1idj0TYwGXAXA0XsBX8ki93d8Yu2J0prUsX
+9GxfKhQrpVDUnyRW+u/ajIp9QXV0UKTdOQDog3znMmyrzbI56lp0BXGOkPoRKcqO
+/fLw9qzudn7oNUSdd2RGm6TgqiUTmpGSX8VqAltHLzT9vmGCgQLY7blcj/r2yweR
+EQA4n7oDP3MRxK2jMXPRsorLAobasVd0+gQ+4bbSqlX5eeu2wn/XG10wpnntiu4t
+zqY37tt3kmubq2fyLwIbhfl5Y8S5XnnCkJM1xlq3ZB/YPrF9wrTz/4eCUdt0VBV+
+uKtLwAtev7qFnDlYL9u950iPHgUKpYDYP7TqDRQhb3kg2vZC++B2MTHiy+B2QrUJ
+rEw7wWnxxpKp0PAMuR7I5Val
+=ezao
+-----END PGP SIGNATURE-----
