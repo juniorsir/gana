@@ -1,21 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>GANA Player APT Repository</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GANA | Hacker Music Player</title>
     <style>
-        body { background: #0f0f0f; color: #00ffff; font-family: monospace; padding: 50px; }
-        a { color: #00ff00; }
+        body { margin: 0; padding: 0; background-color: #0d0d0d; color: #fff; font-family: 'Courier New', Courier, monospace; display: flex; align-content: center; justify-content: center; height: 100vh; flex-direction: column; align-items: center; }
+        .container { text-align: center; max-width: 600px; padding: 40px; background: #1a1a1a; border-radius: 10px; box-shadow: 0 0 20px rgba(0, 255, 255, 0.2); border: 1px solid #333; }
+        h1 { color: #00ffff; font-size: 3em; margin-bottom: 10px; text-shadow: 0 0 10px #00ffff; }
+        p { color: #aaa; font-size: 1.1em; line-height: 1.5; }
+        .code-box { background: #000; padding: 20px; border-radius: 5px; border-left: 4px solid #00ff00; text-align: left; overflow-x: auto; margin-top: 20px; }
+        code { color: #00ff00; font-size: 1.1em; }
+        .btn { display: inline-block; margin-top: 20px; padding: 10px 20px; background: #00ffff; color: #000; text-decoration: none; font-weight: bold; border-radius: 5px; transition: 0.3s; }
+        .btn:hover { background: #00cccc; box-shadow: 0 0 15px #00ffff; }
     </style>
 </head>
 <body>
-    <h1>🎧 GANA PLAYER REPOSITORY</h1>
-    <p>This is an APT repository for Termux. Do not browse here manually.</p>
-    <p>To install, run this in Termux:</p>
-    <pre>
-curl -fsSL https://juniorsir.github.io/gana/public.key | gpg --dearmor | tee $PREFIX/etc/apt/trusted.gpg.d/gana.gpg > /dev/null
-echo "deb https://juniorsir.github.io/gana/ ./" > $PREFIX/etc/apt/sources.list.d/gana.list
-pkg update
-pkg install gana
-    </pre>
+    <div class="container">
+        <h1>🎧 GANA</h1>
+        <p>The Ultimate Cyberpunk CLI Music Player for Termux.</p>
+        
+        <div class="code-box">
+            <code>
+# 1. Add the GPG Key<br>
+curl -fsSL https://juniorsir.github.io/gana/public.key | gpg --dearmor | tee $PREFIX/etc/apt/trusted.gpg.d/gana.gpg > /dev/null<br><br>
+# 2. Add the Repository<br>
+echo "deb https://juniorsir.github.io/gana/ ./" > $PREFIX/etc/apt/sources.list.d/gana.list<br><br>
+# 3. Install<br>
+pkg update && pkg install gana
+            </code>
+        </div>
+        <a href="https://github.com/juniorsir/gana" class="btn">View Source on GitHub</a>
+    </div>
 </body>
 </html>
