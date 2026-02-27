@@ -5,7 +5,7 @@ set -e
 # CONFIG
 # =========================
 APP_NAME="gana"
-VERSION="1.0.6"
+VERSION="1.0.8"
 KEY_ID="87256EF09168BFBB9787D47F0D5C7BC2E3F98249"
 BUILD_DIR="build_termux"
 REPO_DIR="docs"
