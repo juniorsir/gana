@@ -188,28 +188,6 @@ export TERM=xterm-256color
 
 ---
 
-# 📦 Installation for Advanced Users
-
-## Install via DEB (Debian / Ubuntu)
-
-If a `.deb` release is provided:
-
-```bash
-sudo apt install ./gana_1.0.0_all.deb
-```
-
----
-
-## 🔨 Build from Source
-
-```bash
-git clone https://github.com/yourusername/gana
-cd gana
-pip install .
-```
-
----
-
 # ❤️ Made for the CLI Community
 
 Built with love for hackers, developers, and terminal enthusiasts.
@@ -219,5 +197,3 @@ Built with love for hackers, developers, and terminal enthusiasts.
 ## 📄 License
 
 MIT License © 2026
-
-# gana_source
